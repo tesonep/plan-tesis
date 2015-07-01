@@ -6,6 +6,11 @@ Ole Agesen.
   Applications}.
 \newblock {Ph.D}. thesis, Stanford University, December 1996.
 
+\bibitem{Alle13a}
+Esteban Allende, Oscar Callau, Johan Fabry, {\'E}ric Tanter, and Marcus Denker.
+\newblock {Gradual Typing for Smalltalk}.
+\newblock {\em Science of Computer Programming}, August 2013.
+
 \bibitem{Brac04a}
 Gilad Bracha.
 \newblock Pluggable type systems, October 2004.
@@ -15,6 +20,12 @@ Gilad Bracha.
 Luca Cardelli and Peter Wegner.
 \newblock On understanding types, data abstraction, and polymorphism.
 \newblock {\em ACM Computing Surveys}, 17(4):471--522, December 1985.
+
+\bibitem{Grav90a}
+Justin~O. Graver and Ralph~E. Johnson.
+\newblock A type system for smalltalk.
+\newblock In {\em In Seventeenth Symposium on Principles of Programming
+  Languages}, pages 136--150. ACM Press, 1990.
 
 \bibitem{haber86a}
 A~Nico Habermann and David Notkin.
@@ -27,6 +38,13 @@ Stefan Hanenberg.
 \newblock An experiment about static and dynamic type systems: Doubts about the
   positive impact of static type systems on development time.
 \newblock In {\em ACM Sigplan Notices}, volume~45, pages 22--35. ACM, 2010.
+
+\bibitem{Haup11a}
+Michael Haupt, Michael Perscheid, and Robert Hirsch-feld.
+\newblock Type harvesting: A practical approach to obtaining typing information
+  in dynamic programming languages.
+\newblock In {\em Proceedings of the 2011 ACM Symposium on Applied Computing},
+  SAC '11, pages 1282--1289, New York, NY, USA, 2011. ACM.
 
 \bibitem{klein12a}
 Sebastian Kleinschmager, Stefan Hanenberg, Romain Robbes, {\'E}~Tanter, and
@@ -47,6 +65,13 @@ William~F. Opdyke.
 \newblock PhD thesis, Champaign, IL, USA, 1992.
 \newblock UMI Order No. GAX93-05645.
 
+\bibitem{Oxho92a}
+Nicholas Oxh\/oj, Jens Palsberg, and Michael Schwartz-bach.
+\newblock Making type inference practical.
+\newblock In O.~Lehrmann Madsen, editor, {\em Proceedings ECOOP '92}, volume
+  615 of {\em LNCS}, pages 329--349, Utrecht, the Netherlands, June 1992.
+  Springer-Verlag.
+
 \bibitem{Pier02a}
 Benjamin Pierce.
 \newblock {\em Types and Programming Languages}.
@@ -57,5 +82,18 @@ Fr\'{e}d\'{e}ric Pluquet, Antoine Marot, and Roel Wuyts.
 \newblock Fast type reconstruction for dynamically typed programming languages.
 \newblock In {\em DLS '09: Proceedings of the 5th symposium on Dynamic
   languages}, pages 69--78, New York, NY, USA, 2009. ACM.
+
+\bibitem{Spoo05a}
+S.~Alexander Spoon and Olin Shivers.
+\newblock Demand-driven type inference with subgoal pruning: Trading precision
+  for scalability.
+\newblock In {\em Proceedings of ECOOP'04}, pages 51--74, 2004.
+
+\bibitem{Wang01a}
+Tiejun Wang and Scott~F. Smith.
+\newblock Precise constraint-based type inference for java.
+\newblock In G.~Goos, J.~Hartmanis, and J.~van Leeuwen, editors, {\em
+  Proceedings ECOOP '01}, volume 2072 of {\em LNCS}, pages 99--118, Budapest,
+  Hungary, June 2001. Springer-Verlag.
 
 \end{thebibliography}

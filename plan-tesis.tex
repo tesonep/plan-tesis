@@ -1,10 +1,10 @@
 \documentclass[a4paper,10pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=0.9in]{geometry}
 
 %opening
-\title{Herramientas de Refactor e Información Contextual basado en Inferencia de Tipos para lenguajes tipo-inconsientes.\\
+\title{Herramientas de Refactor e Información Contextual basado en Inferencia de Tipos para lenguajes dinámicamente tipados.\\
 -- Propuesta de tesis doctoral -- }
 
 \author{Pablo Tesone}
@@ -19,12 +19,17 @@
 
 Los sistemas de tipos\cite{Pier02a} son una aplicación de la teoría de tipos\cite{Pier02a}, surgida en estudios sobre fundamentos de la matemática, a los lenguajes de programación. 
 
-El uso de sistemas de tipos en programación tiene como objetivo inicial la detección de los llamados errores de tipo\cite{Miln78a}, que ocurren cuando se aplica una operación  a un valor para el que dicha operación no tiene sentido. Por ejemplo, pasar a mayúscula un número constituye un error de tipo, porque la operación de pasar a mayúscula sólo tiene sentido para textos, no para números. 
-``Texto'' y ``número'' son posibles tipos básicos de un sistema de tipos.
+El uso de sistemas de tipos en programación tiene como objetivo la detección de los llamados errores de tipo\cite{Miln78a}, estos errores ocurren al evaluar el programa y son de distintas naturalezas; pero todos producen una situación donde el programa no se comporta de la forma esperada. Un tipo de errores es cuando se aplica una operación a un valor para el que dicha operación no tiene sentido. Por ejemplo, pasar a mayúscula un número constituye un error de tipo, porque la operación de pasar a mayúscula sólo tiene sentido para textos, no para números.  
+``Texto'' y ``número'' son ejemplos de posibles tipos básicos de un sistema de tipos.
 
-La aplicación de un sistema de tipos permite restringir el conjunto de programas correctos a aquellos para los que pueda garantizarse la ausencia de este tipo de errores. Para ello, se debe conocer el tipo de cada elemento incluido en un programa, y restringir cada operación imponiendo que sus argumentos deben respetar un determinado tipo\cite{Miln78a}. Este es el comúnmente llamado \emph{chequeo estático de tipos} presente en varios lenguajes de programación, como Java o C entre otros.
+% El uso de sistemas de tipos en programación tiene como objetivo inicial la detección de los llamados errores de tipo\cite{Miln78a}, que ocurren cuando se aplica una operación a un valor para el que dicha operación no tiene sentido. Por ejemplo, pasar a mayúscula un número constituye un error de tipo, porque la operación de pasar a mayúscula sólo tiene sentido para textos, no para números. 
+% ``Texto'' y ``número'' son posibles tipos básicos de un sistema de tipos.
 
-En el siguiente ejemplo, la operación tiene sentido ya que el valor almacenado en \verb|v1| es un ``Texto'':
+La aplicación de un sistema de tipos permite restringir el conjunto de programas correctos a aquellos para los que se puse garantizar la ausencia de errores. Para lograr este objetivo es deseable conocer el tipo de cada elemento incluido en el programa, y restringir las operaciones a aquellas que mantengan la seguridad de que no se produzcan errores al momento de evaluar el programa. En los lenguajes con \emph{chequeo estático de tipos} (como son C o Java entre otros) esta validación se realiza antes de la evaluación del programa, mientras que en los lenguajes con \emph{chequeo dinámico de tipos} o también llamados \emph{dinámicamente tipados}\cite{Pier02a,Card85c} este chequeo se realiza en el momento de la evalución del programa; siendo necesario que el programa se ponga en funcionamiento para detectar el error. 
+
+% La aplicación de un sistema de tipos permite restringir el conjunto de programas correctos a aquellos para los que pueda garantizarse la ausencia de errores. Para ello, se debe conocer el tipo de cada elemento incluido en un programa, y restringir cada operación imponiendo que sus argumentos deben respetar un determinado tipo\cite{Miln78a}. Este es el comúnmente llamado \emph{chequeo estático de tipos} presente en varios lenguajes de programación, como Java o C entre otros.
+
+En el primer ejemplo, la operación tiene sentido ya que el valor almacenado en \verb|v1| es un ``Texto'':
 
 \begin{verbatim}
   var v1 = "hola"
@@ -38,54 +43,60 @@ Mientras que en el siguiente, la misma no tiene sentido ya que el valor almacena
   v2.pasarAMayuscula()
 \end{verbatim}
 
-Observamos que el uso de un sistema de tipos implica contar con información valiosa sobre los distintos componentes de un programa. 
-Esto da lugar a un efecto adicional, que es el aprovechamiento que un entorno de desarrollo\cite{haber86a} puede realizar de dicha información, proponiendo posibilidades para completar una línea de código que se está escribiendo (la llamada ayuda sensible al contexto)\cite{haber86a}, y permitiendo una mayor precisión y riqueza de las acciones de reorganización de código conocidas como \emph{refactors}\cite{Opdyke92a}.  
+% Observamos que el uso de un sistema de tipos implica contar con información valiosa sobre los distintos componentes de un programa. 
+Para poder realizar las validaciones sin necesidad de evaluar el programa en su totalidad, es necesario contar información de tipos de los distintos componentes del programa.
+
+Esto da lugar a un efecto adicional, que es el aprovechamiento que un entorno de desarrollo\cite{haber86a} puede realizar de dicha información, 
+por ejemplo proveyendo información en tiempo real a medida que el programador edita el código del programa, la llamada ayuda sensible al contexto\cite{haber86a}. Por ejemplo, al ingresar el texto \verb|v1.| el editor puede sugerir en un menú desplegable solo las operaciones válidas, entre las que se encuentra \verb|pasarAMayuscula|, ya que cuenta con la información de que \verb|v1| es de tipo ``Texto''; esta información es provista por el sistema de tipos.
+
+% proponiendo posibilidades para completar una línea de código que se está escribiendo (la llamada ayuda sensible al contexto)\cite{haber86a}, y 
+% permitiendo una mayor precisión y riqueza de las acciones de reorganización de código conocidas como \emph{refactors}\cite{Opdyke92a}.  
+
+Otro uso común de la información es para nutrir las herramientas de reorganización automática de código, conocidas como \emph{refactors}\cite{Opdyke92a}.  
+Un ejemplo de una herramienta de refactor es la capacidad de cambiar el nombre de una operación en su definición y en todos los lugares donde se usa; todo de forma automática. Supongamos que tenemos dos operaciones llamadas ``multiplicar'', una sobre los números (que multiplica el número original con el pasado como parámetro) y una sobre los textos (que repite el texto la cantidad de veces recibida por parámetro). Por motivos de calidad del código, el programador desea cambiar el nombre la de la segunda. Pero este cambio solo se debe hacer en los usos donde el objeto modificado es un texto, manteniendo sin cambio el uso sobre los números. Para poder lograrlo es necesario contar con el detalle del tipo de cada parte del programa. 
+
 La potencia de los entornos de desarrollo actualmente disponibles les permite brindar capacidades extensivas en este sentido, lo que redunda en un ahorro de tiempo considerable en las tareas que llevan a cabo los programadores en su trabajo cotidiano. Por lo tanto, este aspecto del uso de sistemas de tipos en lenguajes de programación tiene una gran relevancia hoy en día.
 %ya que permite ahorrar a los programadores en su desarrollo profesional
 %dada la potencia de los entornos de desarrollo disponibles; y la cantidad de trabajo que permite ahorrar a los programadores en su desarrollo profesional.
 
 El uso de sistemas de tipos también tiene consecuencias no deseadas\cite{klein12a,hanen10a}.
-Entre ellas, destacamos la necesidad de escribir código adicional, cuyo único efecto es especificar los tipos de cada componente de un programa. Esto puede implicar que se agregue, dentro del código que compone un programa, una gran cantidad de definiciones, que deben ser generadas y luego mantenidas.
-Otra desventaja potencial del uso de sistemas de tipos es que el criterio de corrección de un programa podría resultar demasiado restrictivo, impidiendo formas de estructurar programas que podrían resultar útiles\cite{Card85c} para lograr programas más fácilmente extensibles, o componentes que pudieran ser reutilizados en distintos programas.
-% entre ellas la necesidad de incluir lo que puede ser una gran cantidad de definiciones de tipo, en el texto de un programa; ya que es necesario escribir código adicional solamente para informar los tipos de cada parte del programa. Además, la posibilidad de  que la restricción que impone sobre el conjunto de programas sea demasiado extensa, impidiendo formas de combinar elementos que componen un programa que pueden resultar útiles\cite{Card85c}.
+% Entre ellas, destacamos la necesidad de escribir código adicional, cuyo único efecto es especificar los tipos de cada componente de un programa. Esto puede implicar que se agregue, dentro del código que compone un programa, una gran cantidad de definiciones, que deben ser generadas y luego mantenidas.
+Una desventaja potencial del uso de sistemas de tipos es que el criterio de corrección de un programa podría resultar demasiado restrictivo, impidiendo formas de estructurar programas que podrían resultar útiles\cite{Card85c} para lograr programas más fácilmente extensibles, o componentes que pudieran ser reutilizados en distintos programas.
 
-La industria del desarrollo de software está presenciando, en estos años, una creciente utilización de lenguajes de programación que no utilizan sistemas de tipos. 
-En distintas fuentes de la literatura se asocian los términos \emph{débilmente tipado}, \emph{dinámicamente tipado} y \emph{no tipado}\cite{Pier02a,Card85c} para referirse a esta característica que puede presentar un lenguaje de programación. En este documento, hablaremos de lenguajes \emph{tipo-inconscientes}. 
+La industria del desarrollo de software está presenciando, en estos años, una creciente utilización de lenguajes de programación dinámicamente tipados. Este tipo de lenguajes evitan contener en el texto del programa información de tipos, haciendo que el código que se requiere escribir para realizar una determinada actividad sea mucho más sintético, y por lo tanto mantenible y flexible. 
 Algunos de estos lenguajes, tales como Javascript, Ruby, Php, Smalltalk y Python, son extensamente utilizados, en particular en el desarrollo de aplicaciones Web y para dispositivos móviles.
 
-Los lenguajes de programación tipo-inconsientes evitan contener en el texto del programa información de tipos, haciendo que el código que se requiere escribir para realizar una determinada actividad sea mucho más sintético, y por lo tanto mantenible y flexible. 
 
-Por otro lado, en estos lenguajes no se cuenta con información sobre el tipo requerido de cada componente de un programa. En consecuencia no se pueden proporcionar, en los entornos de desarrollo, herramientas automatizadas que basan su comportamiento en la información que brinda un sistema de tipos, de acuerdo a lo descripto anteriormente.
+% En distintas fuentes de la literatura se asocian los términos \emph{débilmente tipado}, \emph{dinámicamente tipado} y \emph{no tipado}\cite{Pier02a,Card85c} para referirse a esta característica que puede presentar un lenguaje de programación. En este documento, hablaremos de lenguajes \emph{dinámicamente tipados}. 
 
-Un ejemplo de estas herramientas es la capacidad de cambiar el nombre de una operación en su definición y en todos los lugares donde se usa; todo de forma automática. Supongamos que tenemos dos operaciones llamadas ``multiplicar'', una sobre los números (que multiplica el número original con el pasado como parámetro) y una sobre los textos (que repite el texto la cantidad de veces recibida por parámetro). Por motivos de calidad del código, el programador desea cambiar el nombre la de la segunda. Pero este cambio solo se debe hacer en los usos donde el objeto modificado es un texto, manteniendo sin cambio el uso sobre los números. Para poder lograrlo es necesario contar con el detalle del tipo de cada parte del programa. 
+Por otro lado, en estos lenguajes no se cuenta con información sobre el tipo requerido de cada componente de un programa. En consecuencia no se pueden proporcionar, en los entornos de desarrollo, herramientas automatizadas que proveean el mismo nivel de funcionalidad que las existentes para lenguajes con chequeo estático. Ya que dichas herramientas basan su comportamiento en la información que brinda un sistema de tipos, de acuerdo a lo descripto anteriormente.
 
 %Sin embargo, esto no permite proveer herramientas automatizadas que basan su comportamiento en la información del sistema de tipos. 
 %
 
 Una estrategia utilizada para paliar la ausencia de información de tipos en un programa es el proceso conocido como \emph{inferencia de tipos}\cite{Miln78a}, en el cual se obtiene cierto nivel de información a partir del análisis de las estructuras de un programa dado.
 %Aunque no se cuenta con información explicita en el texto del programa, es posible obtener cierto nivel de información a partir del análisis de las estructuras del programa, |un proceso conocido como inferencia de tipos\cite{Miln78a}.
-Sin embargo, la inferencia de tipos utilizando los enfoques más estudiados en la literatura, no puede ser aplicado a los lenguajes tipo-inconsientes orientados a objetos que son utilizados en la industria, como los mencionados anteriormente.
+Sin embargo, la inferencia de tipos utilizando los enfoques más estudiados en la literatura, no puede ser aplicado a los lenguajes dinámicamente tipados orientados a objetos que son utilizados en la industria (mencionados anteriormente) con la efectividad necesaria.
 %son Javascript, Ruby, Php, Smalltalk y Python. 
 
 
 
 \subsection{Objetivos Generales}
 
-Para programas escritos en lenguajes tipo-inconscientes, la información relacionada con los tipos de cada componente que puede obtener un entorno de desarrollo es limitada. Esto es consecuencia de la situación descripta en el marco general.
+Para programas escritos en lenguajes dinámicamente tipados, la información relacionada con los tipos de cada componente que puede obtener un entorno de desarrollo es limitada. Esto es consecuencia de la situación descripta en el marco general.
 Por lo tanto, los entornos integrados de desarrollo y otras herramientas que utilizan los usuarios de dichos lenguajes, resultan limitados respecto de las características de refactors e información contextual que proveen, si los comparamos con herramientas para lenguajes con sistemas de tipos explicito como son \emph{Eclipse} para Java o \emph{Visual Studio} para C\#. 
 %Los sistemas de inferencia de tipos tradicionales, no pueden obtener información suficiente sobre los lenguajes previamente descriptos. Esto hace que la mayoria de los usuarios de dichos lenguajes trabajen con herramientas y entornos de desarrollo integrados limitados en sus características de refactos e información contextual; si los comparamos con herramientas para lenguajes con un sistema de tipos explicito como son Eclipse para Java o Visual Studio para C\#. 
-Existen algunas propuestas de definir sistemas de tipos y herramientas que puedan aplicarse a lenguajes tipo-inconscientes, que no apuntan a poder realizar chequeos estáticos de tipos, sino a proporcionar información sobre los componentes de un programa, que pueda ser explotada de distintas formas. Estas propuestas existentes no permiten su utilización en tiempo real en programas de nivel industrial, ya que o no cubren la totalidad del las funciones del lenguaje\cite{Pluq09a} o no lo logran con la eficiencia requerida para funcionar en tiempo real\cite{Ages96a}.
+Existen algunas propuestas de definir sistemas de tipos y herramientas que puedan aplicarse a lenguajes dinámicamente tipados, que no apuntan a poder realizar chequeos estáticos de tipos, sino a proporcionar información sobre los componentes de un programa, que pueda ser explotada de distintas formas. Estas propuestas existentes no permiten su utilización en tiempo real en programas de nivel industrial, ya que o no cubren la totalidad del las funciones del lenguaje\cite{Pluq09a,Wang01a,Pluq09a}, no lo logran con la eficiencia requerida para funcionar en tiempo real\cite{Ages96a,Spoo05a,Oxho92a} y de forma incremental a medida que el programador edita el código del programa, requieren de la ejecución del programa\cite{Haup11a} o algún tipo de modificación del programa original\cite{Grav90a,Alle13a}.
 
 Además existen sistemas de tipos conocidos como \emph{Pluggable Type Systems}\cite{Brac04a}, que estan concebidos como elementos externos al lenguaje de programación que pueden ser utilizados de forma opcional como herramientas en distintas etapas del desarrollo.
 
-El primer objetivo general del trabajo propuesto es definir un conjunto de algoritmos y mecanismos para la obtención de información de tipos, que pueda ser utilizado en entornos de desarrollo y lenguajes de programación de uso en la industria del software.
+El primer objetivo general del trabajo propuesto es definir un conjunto de algoritmos y mecanismos, basados en el concepto de sistema de tipos y técnicas de inferencia, para la obtención de información que pueda ser utilizado en entornos de desarrollo y lenguajes de programación de uso en la industria del software. Esto realizado de forma iterativa e incremental mientras el usuario edita el código del programa.
 Esta información, aunque incompleta para realizar una validación de los programas, es extremadamente útil para mejorar la asistencia automática que las herramientas de desarrollo pueden realizar, de acuerdo a lo descripto en el marco general; siendo posible habilitar o deshabilitar las mismas siguiendo las ideas planteadas por \emph{Pluggable Type Systems}.
 %Se propone realizar un conjunto de algoritmos y mecanismos para la obtención de información de tipos para ser utilizado en un entorno de desarrollo de nivel industrial sobre un lenguaje de uso industrial. Esta información, aunque incompleta para realizar una validación del programa, es extremadamente útil para mejorar la asistencia automática que las herramientas de desarrollo pueden realizar.
 
 Como caso de estudio de los algoritmos y técnicas desarrollados, realizaremos las implementaciones correspondientes para el lenguaje Smalltalk, en el ambiente de desarrollo Pharo\footnote{Pharo es un ambiente de desarrollo e implementación de Smalltalk. http://www.pharo.org }.
 Por lo tanto, el segundo objetivo general es el desarrollo de herramientas de análisis y modificación automáticos de programas, que se integren en el entorno Pharo. Estas herramientas podrán ser aprovechadas por el conjunto de desarrolladores que utilizan, durante su desempeño profesional, el lenguaje y entorno de desarrollo mencionados.
 %Especificamente se propone implementar este conjunto de algoritmos y mecanismos para el lenguaje Smalltalk y el ambiente de desarrollo Pharo\footnote{Pharo es un ambiente de desarrollo e implementación de Smalltalk. http://www.pharo.org }. Teniendo como objetivo general el desarrollo de herramientas integradas en el entorno de desarrollo Pharo y que las mismas puedan ser utilizadas por el conjunto de desarrolladores que utilizan este entorno de desarrollo y lenguaje durante su desempeño profesional.
-
 
 \subsection{Objetivos Específicos}
 
@@ -144,14 +155,21 @@ Cabe mencionar que se cuenta con amplia colaboración con el equipo que realiza 
 
 Un ejemplo de esta continua colaboración es que el postulante realizará una estadía durante los meses de Agosto a Diciembre de 2015, en el laboratorio antes señalado para la continuación de la línea de investigación propuesta en \emph{An extensible constraint based type inference algorithm for object-oriented dynamic languages supporting blocks and generic types}. El financiamiento de dicha estadia es realizado por INRIA Nord Europe y Pharo Consortium.
 
-También existe una amplia comunidad de usuarios de Pharo en Argentina y Europa; el postulante y el director propuesto mantienen un contacto regular con varios miembros de dicha comunidad.
+También existe una amplia comunidad de usuarios de Pharo en Argentina y Europa, tanto en su uso industrial como académico; el postulante y el director propuesto mantienen un contacto regular con varios miembros de dicha comunidad.
+
+Sumado a la existencia de una importante comunidad de usuarios y la amplia relación con el principal grupo de desarrollo de Pharo; la elección de Smalltalk, y más precisamente de Pharo, está motivada por la existencia de un extenso conjunto de herramientas que facilitan el análisis del texto del programa y de un entorno de desarrollo integrado.
+El conjunto de herramientas de análisis de código, entre las que se destacan parsers, manejo de AST\footnote{Abstract Syntax Tree}, acceso a modificar el proceso de compilación y visualización de estructuras de código y datos; permiten centrarse en el abordaje de los objetivos de la propuesta de trabajo. 
+La existencia de un entorno de desarrollo integrado, que es utilizado por la totalidad de los usuarios de Pharo, permite la rápida adopción de los resultados generados como consecuencia de este trabajo propuesto y el logro de un impacto significativo para la comunidad de usuarios.
+
+% esta guiada por la existencia de un extenso conjunto de herramientas que facilitan el análisis del texto del programa (como son parsers, manejo de AST y acceso a modificar el proceso de compilación) permitiendo centrarse en los temas especificos a abordar; 
+% y de un entorno de desarrollo integrado donde los usuarios realizan la edición de los programas, permitiendo que cualquier herramienta generada sea de fácil aplicación para los programadores.
 
 \section{Actividades y Metodología}
 
 Las actividades a realizar se dividen en las siguientes etapas:
 
   \begin{enumerate}
-   \item Revisión de la literatura existente. Esto incluye métodos tradicionales de inferencia de tipos, y aplicaciones existentes sobre lenguajes de objetos tipo-inconscientes.
+   \item Revisión de la literatura existente. Esto incluye métodos tradicionales de inferencia de tipos, y aplicaciones existentes sobre lenguajes de objetos dinámicamente tipados.
    \item Desarrollar un algoritmo que de forma iterativa e incremental vaya generando la mayor cantidad posible de información a partir de un programa completo o incompleto.
    \item Realizar un prototipo de este lenguaje para probar el nivel de información provisto sobre programas reales escritos para Pharo.
    \item Realizar una implementación eficiente en tiempo de ejecución y espacio de memoria del algoritmo desarrollado.
