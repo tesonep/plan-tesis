@@ -73,10 +73,10 @@ order=2
 
 [item:plan-tesis.tex]
 archive=true
-column=0
+column=383
 encoding=UTF-8
 highlight=LaTeX
-line=60
+line=88
 mode=LaTeX
 open=true
 order=0
@@ -124,10 +124,10 @@ JumpList=
 ViMarks=.,50161,11,[,50161,11,],50161,11
 
 [view-settings,view=0,item:plan-tesis.tex]
-CursorColumn=0
-CursorLine=60
+CursorColumn=383
+CursorLine=88
 JumpList=
-ViMarks=.,59,727,[,59,710,],59,727
+ViMarks=.,88,383,[,88,383,],88,383
 
 [view-settings,view=0,item:rmod.bib]
 CursorColumn=18
