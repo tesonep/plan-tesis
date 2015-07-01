@@ -1,0 +1,119 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+
+%opening
+\title{Herramientas de Refactor e Información Contextual basado en Inferencia de Tipos para lenguajes tipo-inconsientes.\\
+-- Propuesta de tesis doctoral -- }
+
+\author{Pablo Tesone}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Objetivos}
+\subsection{Marco General}
+
+Los sistemas de tipos\cite{Pier02a} son una aplicación de la teoría de tipos\cite{Pier02a}, surgida en estudios sobre fundamentos de la matemática, a los lenguajes de programación. 
+
+El uso de sistemas de tipos en programación tiene como objetivo inicial la detección de los llamados errores de tipo\cite{Miln78a}, que ocurren cuando se aplica una operación  a un valor para el que dicha operación no tiene sentido. Por ejemplo, pasar a mayúscula un número constituye un error de tipo, porque la operación de pasar a mayúscula sólo tiene sentido para textos, no para números. 
+
+"Texto" y "número" son posibles tipos básicos de un sistema de tipos.
+
+La aplicación de un sistema de tipos permite restringir el conjunto de programas correctos a aquellos para los que pueda garantizarse la ausencia de este tipo de errores. Para ello, se debe conocer el tipo de cada elemento incluido en un programa, y restringir cada operación imponiendo que sus argumentos deben respetar un determinado tipo\cite{Miln78a}. 
+
+Observamos que el uso de un sistema de tipos implica contar con información valiosa sobre los distintos 
+componentes de un programa. Esto da lugar a un efecto adicional, que es el aprovechamiento que un entorno de 
+desarrollo\cite{haber86a} puede realizar de dicha información, proponiendo posibilidades para completar una línea de código que se está escribiendo (la llamada ayuda sensible al contexto)\cite{haber86a}, y permitiendo una mayor precisión y riqueza de las acciones de reorganización de código conocidas como refactors\cite{Opdyke92a}. 
+Este aspecto tiene una gran relevancia hoy en día, dada la potencia de los entornos de desarrollo disponibles; y la cantidad de trabajo que permite ahorrar a los programadores en su desarrollo profesional.
+
+El uso de sistemas de tipos también tiene consecuencias no deseadas\cite{klein12a,hanen10a}, entre ellas la necesidad de incluir lo que puede ser una gran cantidad de definiciones de tipo, en el texto de un programa; ya que es necesario escribir código adicional solamente para informar los tipos de cada parte del programa. Además, la posibilidad de 
+que la restricción que impone sobre el conjunto de programas sea demasiado extensa, impidiendo formas de 
+combinar elementos que componen un programa que pueden resultar útiles\cite{Card85c}.
+
+La industria del desarrollo de software está presenciando, en estos años, una creciente utilización de lenguajes 
+de programación que no utilizan sistemas de tipos. 
+
+En distintas fuentes de la literatura se asocian los términos  débilmente tipado, dinámicamente tipado y no tipado\cite{Pier02a,Card85c} para referirse a esta característica que puede 
+presentar un lenguaje de programación. En este documento, hablaremos de lenguajes tipo-inconscientes. 
+Algunos de estos lenguajes, tales como Javascript, Ruby, Php, Smalltalk y Python, son extensamente utilizados, en particular en el desarrollo de aplicaciones Web y para dispositivos móviles.
+
+Los lenguajes de programación tipo-inconsientes evitan contener en el texto del programa información de tipos, haciendo que el texto código para realizar una determinada actividad sea mucho más sintético, y por lo tanto mantenible y flexible. 
+Sin embargo, esto no permite proveer herramientas automatizadas que basan su comportamiento en la información del sistema de tipos. 
+
+Aunque no se cuenta con información explicita en el texto del programa, es posible obtener cierto nivel de información a partir del análisis de las estructuras del programa, un proceso conocido como inferencia de tipos\cite{Miln78a}.
+
+Sin embargo, la inferencia de tipos utilizando los enfoques tradicionales no puede ser aplicado a los lenguajes tipo-inconsientes orientados a objetos que son utilizados en la industria, como son Javascript, Ruby, Php, Smalltalk y Python. 
+
+\subsection{Objetivos Generales}
+
+Los sistemas de inferencia de tipos tradicionales, no pueden obtener información suficiente sobre los lenguajes previamente descriptos. Esto hace que la mayoria de los usuarios de dichos lenguajes trabajen con herramientas y entornos de desarrollo integrados limitados en sus características de refactos e información contextual; si los comparamos con herramientas para lenguajes con un sistema de tipos explicito como son Eclipse para Java o Visual Studio para C\#. 
+
+Se propone realizar un conjunto de algoritmos y mecanismos para la obtención de información de tipos para ser utilizado en un entorno de desarrollo de nivel industrial sobre un lenguaje de uso industrial. Esta información, aunque incompleta para realizar una validación del programa, es extremadamente útil para mejorar la asistencia automática que las herramientas de desarrollo pueden realizar.
+
+Especificamente se propone implementar este conjunto de algoritmos y mecanismos para el lenguaje Smalltalk y el ambiente de desarrollo Pharo\footnote{Pharo es un ambiente de desarrollo e implementación de Smalltalk. http://www.pharo.org }. Teniendo como objetivo general el desarrollo de herramientas integradas en el entorno de desarrollo Pharo y que las mismas puedan ser utilizadas por el conjunto de desarrolladores que utilizan este entorno de desarrollo y lenguaje durante su desempeño profesional.
+
+\subsection{Objetivos Específicos}
+
+Se propone:
+
+\begin{enumerate}
+ \item Establecer la implementación de Smalltalk en Pharo como objeto de estudio, y formular un algoritmo de inferencia de tipos que tenga en cuenta todas las características dinámicas de este lenguaje y en particular de su implementación.
+ 
+ \item Realizar una implementación del algoritmo de inferencia de tipos, que permita una ejecución, de forma eficiente e incremental, en tiempo real durante la utilización del entorno de desarrollo. Con el objetivo de proveer información y sugerencias mientras el usuario escribe el programa.
+ 
+ \item Realizar un análisis del sistema de tipos del conjunto de librerias y programas escritos en Pharo para validar la correcta generación de la información y los tiempos de ejecución del algoritmo.
+ 
+ \item Integrar la implementación del algoritmo dentro del conjunto de herramientas presentes en Pharo.
+ 
+ \item Aprovechar la información de tipos para realizar sugerencias y proveer información contextual durante la edición del programa.
+ \item Aprovechar la información de tipos para la implementación de herramientas automatizadas de modificación del programa. 
+\end{enumerate}
+
+\section{Antecedentes}
+
+Existen trabajos previos junto a los directores de esta propuesta en temas directamente relacionados con el trabajo propuesto\footnote{Solamente se listan los trabajos que tienen mayor relación con la temática propuesta}; cuyos detalles se listan abajo.
+
+\begin{itemize}
+ \item Nicolás Passerini, Pablo Tesone, Stéphane Ducasse, An extensible constraint based type inference
+algorithm for object-oriented dynamic languages supporting blocks and generic types, IWST, Reino Unido, 2014.
+ 
+ \item Stéphane Ducasse, Robb Nebbe and Tamar Richner, Two Reengineering Patterns: Eliminating Type Checking, Proceedings of the 4th European Conference on Pattern Languages of Programming and Computing, 1999
+ 
+ \item Tudor Gîrba, Jean-Marie Favre and Stéphane Ducasse, Using Meta-Model Transformation to Model Software Evolution, Proceedings of 2nd International Workshop on Meta-Models and Schemas for Reverse Engineering (ATEM 2004), 57–64, 2004
+ 
+ \item Stéphane Ducasse, Matthias Rieger and Georges Golomingi, Tool Support for Refactoring Duplicated OO Code, Proceedings of the ECOOP '99 Workshop on Experiences in Object-Oriented Re-Engineering, Forschungszentrum Informatik, Karlsruhe, 1999
+ 
+ \item Oscar Nierstrasz, Stéphane Ducasse and Serge Demeyer, Object-oriented Reengineering Patterns — an Overview, Proceedings of Generative Programming and Component Engineering (GPCE 2005), 1–9, LNCS 3676, 2005
+ 
+\end{itemize}
+
+Cabe mencionar que se cuenta con amplia colaboración con el equipo que realiza el mantenimiento del entorno Pharo, en particular con el equipo que se encuentra trabajando en el laboratorio RMod de INRIA Nord Europe y una amplia comunidad de usuarios de Pharo en Argentina y Europa.
+
+\section{Actividades y Metodología}
+
+Las actividades a realizar se dividen en las siguientes etapas:
+
+  \begin{enumerate}
+   \item Revisión de la literatura existente. Esto incluye métodos tradicionales de inferencia de tipos, y aplicaciones existentes sobre lenguajes de objetos tipo-inconscientes.
+   \item Desarrollar un algoritmo que de forma iterativa e incremental vaya generando la mayor cantidad posible de información a partir de un programa completo o incompleto.
+   \item Realizar un prototipo de este lenguaje para probar el nivel de información provisto sobre programas reales escritos para Pharo.
+   \item Realizar una implementación eficiente en tiempo de ejecución y espacio de memoria del algoritmo desarrollado.
+   \item Integrar esta herramienta desarrollada en el proceso de edición y compilación de los programas en Pharo.
+   \item Implementar herramientas de sugerencias y refactors basadas en la información obtenida por la inferencia de tipos.
+  \end{enumerate}
+
+
+\section{Factibilidad}
+
+El Departamento de Ciencia y Tecnología de la Universidad Nacional de Quilmes cuenta con la infraestructura necesaria, que en este caso consiste principalmente de espacio físico, mobiliario de oficina, acceso a conectividad a Internet, impresora (tóner y papel) y una PC o portable.
+
+Actualmente los directores cuentan con proyectos UBACyT y PUNQ que servirían para cubrir las necesidades antes mencionadas. 
+También hay financiamiento por parte de INRIA Lille Nord Europe y de Pharo Consortium para estadías en Francia.
+
+\bibliographystyle{plain}
+\bibliography{inferencer,others,rmod}
+
+\end{document}

@@ -1,0 +1,61 @@
+\begin{thebibliography}{10}
+
+\bibitem{Ages96a}
+Ole Agesen.
+\newblock {\em Concrete Type Inference: Delivering Object-Oriented
+  Applications}.
+\newblock {Ph.D}. thesis, Stanford University, December 1996.
+
+\bibitem{Brac04a}
+Gilad Bracha.
+\newblock Pluggable type systems, October 2004.
+\newblock {OOPSLA} Workshop on Revival of Dynamic Languages.
+
+\bibitem{Card85c}
+Luca Cardelli and Peter Wegner.
+\newblock On understanding types, data abstraction, and polymorphism.
+\newblock {\em ACM Computing Surveys}, 17(4):471--522, December 1985.
+
+\bibitem{haber86a}
+A~Nico Habermann and David Notkin.
+\newblock Gandalf: Software development environments.
+\newblock {\em IEEE Transactions on Software Engineering}, (12):1117--1127,
+  1986.
+
+\bibitem{hanen10a}
+Stefan Hanenberg.
+\newblock An experiment about static and dynamic type systems: Doubts about the
+  positive impact of static type systems on development time.
+\newblock In {\em ACM Sigplan Notices}, volume~45, pages 22--35. ACM, 2010.
+
+\bibitem{klein12a}
+Sebastian Kleinschmager, Stefan Hanenberg, Romain Robbes, {\'E}~Tanter, and
+  Andreas Stefik.
+\newblock Do static type systems improve the maintainability of software
+  systems? an empirical study.
+\newblock In {\em Program Comprehension (ICPC), 2012 IEEE 20th International
+  Conference on}, pages 153--162. IEEE, 2012.
+
+\bibitem{Miln78a}
+Robin Milner.
+\newblock A theory of type polymorphism in programming.
+\newblock {\em Journal of Computer and System Sciences}, 17:348--375, 1978.
+
+\bibitem{Opdyke92a}
+William~F. Opdyke.
+\newblock {\em Refactoring Object-oriented Frameworks}.
+\newblock PhD thesis, Champaign, IL, USA, 1992.
+\newblock UMI Order No. GAX93-05645.
+
+\bibitem{Pier02a}
+Benjamin Pierce.
+\newblock {\em Types and Programming Languages}.
+\newblock The MIT Press, 2002.
+
+\bibitem{Pluq09a}
+Fr\'{e}d\'{e}ric Pluquet, Antoine Marot, and Roel Wuyts.
+\newblock Fast type reconstruction for dynamically typed programming languages.
+\newblock In {\em DLS '09: Proceedings of the 5th symposium on Dynamic
+  languages}, pages 69--78, New York, NY, USA, 2009. ACM.
+
+\end{thebibliography}
